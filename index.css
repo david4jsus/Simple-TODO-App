@@ -1,0 +1,36 @@
+.itemContainer {
+   border: 1px solid black;
+   padding: 10px;
+}
+
+.projectContainer {
+   border: 2px solid black;
+   padding: 10px;
+}
+
+.floatingMenu {
+   width: 80%;
+   position: fixed;
+   z-index: 1;
+   left: 10%;
+   top: 25%;
+   background-color: rgba(0, 0, 0, 0.4);
+   padding: 20px;
+}
+
+/*.itemOption {
+   display: none;
+}
+
+.itemOption:hover {
+   display: inline;
+}*/
+
+.itemInfo {
+   max-height: 0;
+   overflow: hidden;
+}
+
+.itemInfoExpanded {
+   max-height: initial;
+}
