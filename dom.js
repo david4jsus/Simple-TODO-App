@@ -10,6 +10,7 @@ var TODOController = function() {
 
    let master = Master();
    let currentProjectIndex = -1;
+   let currentTheme = 0;
 
    // Main container
    let mainContainer = document.getElementById ("body");
@@ -39,7 +40,7 @@ var TODOController = function() {
       let title = document.createElement ("h2");
       let titleText = document.createTextNode ("Projects | ");
       let titleAddButton = document.createElement ("button");
-      titleAddButton.textContent = "[Add]";
+      titleAddButton.textContent = "Create New Project";
       titleAddButton.onclick = LoadNewProjectView;
       title.appendChild (titleText);
       title.appendChild (titleAddButton);
@@ -53,11 +54,13 @@ var TODOController = function() {
 
          // Create list item with project title
          let projectListing = document.createElement ("li");
+         projectListing.className = "projectListing";
          let projectTitle = document.createElement ("span");
          projectTitle.textContent = master.getProject (i).getTitle();
          projectTitle.onclick = function() {LoadProjectView (i)};
          projectListing.appendChild (projectTitle);
          let projectDeleteButton = document.createElement ("span");
+         projectDeleteButton.className = "projectListingFloating";
          projectDeleteButton.textContent = " | Delete";
          projectDeleteButton.onclick = function() {RemoveProject (i)};
          projectListing.appendChild (projectDeleteButton);
@@ -105,6 +108,11 @@ var TODOController = function() {
       newProjectCreate.textContent = "Create";
       newProjectCreate.onclick = CreateNewProject;
       menuContainer.appendChild (newProjectCreate);
+
+      // Create some spacing between the two buttons
+      let spacing = document.createElement ("span");
+      spacing.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+      menuContainer.appendChild (spacing);
 
       // Create button to cancel new project
       let newProjectCancel = document.createElement ("button");
@@ -158,6 +166,7 @@ var TODOController = function() {
 
       // Create link back to project list
       let linkBack = document.createElement ("h4");
+      linkBack.className = "projectLinkBack";
       linkBack.textContent = "< Projects";
       linkBack.onclick = LoadMainView;
       mainContainer.appendChild (linkBack);
@@ -166,7 +175,7 @@ var TODOController = function() {
       let title = document.createElement ("h2");
       let titleText = document.createTextNode (project.getTitle() + " | ");
       let titleAddButton = document.createElement ("button");
-      titleAddButton.textContent = "[Add]";
+      titleAddButton.textContent = "Create New Item";
       titleAddButton.onclick = LoadNewItemView;
       title.appendChild (titleText);
       title.appendChild (titleAddButton);
@@ -184,11 +193,15 @@ var TODOController = function() {
 
          // Create item listing
          let itemListing = document.createElement ("li");
+         itemListing.className = "itemListing";
          itemListing.onclick = function() {toggleExpandItemInfo (i)};
-         let itemTitle = document.createTextNode (itemObj.getTitle());
+         let itemTitle = document.createElement ("span");
+         itemTitle.id = "itemTitle";
+         itemTitle.className = "itemTitle";
+         itemTitle.textContent = itemObj.getTitle();
          let itemDeleteButton = document.createElement ("span");
+         itemDeleteButton.className = "itemListingFloating";
          itemDeleteButton.textContent = " | Delete";
-         //itemDeleteButton.className = "itemOption";
          itemDeleteButton.onclick = function() {
             RemoveItem (i, currentProjectIndex);
          };
@@ -201,13 +214,13 @@ var TODOController = function() {
          itemInfoPanel.className = "itemInfo";
          let itemInfoList = document.createElement ("ul");
          let itemInfoDescription = document.createElement ("li");
-         itemInfoDescription.textContent = "Description: " + itemObj.getDescription();
+         itemInfoDescription.innerHTML = "<b>Description:</b> " + itemObj.getDescription();
          itemInfoList.appendChild (itemInfoDescription);
          let itemInfoDueDate = document.createElement ("li");
-         itemInfoDueDate.textContent = "Due date: " + itemObj.getDueDate();
+         itemInfoDueDate.innerHTML = "<b>Due date:</b> " + itemObj.getDueDate();
          itemInfoList.appendChild (itemInfoDueDate);
          let itemInfoPriority = document.createElement ("li");
-         itemInfoPriority.textContent = "Priority: " + itemObj.getPriority();
+         itemInfoPriority.innerHTML = "<b>Priority:</b> " + itemObj.getPriority();
          itemInfoList.appendChild (itemInfoPriority);
          itemInfoPanel.appendChild (itemInfoList);
          itemsContainer.appendChild (itemInfoPanel);
@@ -314,6 +327,11 @@ var TODOController = function() {
       newItemCreate.onclick = CreateNewItem;
       menuContainer.appendChild (newItemCreate);
 
+      // Create some spacing between the two buttons
+      let spacing = document.createElement ("span");
+      spacing.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+      menuContainer.appendChild (spacing);
+
       // Create button to cancel new item
       let newItemCancel = document.createElement ("button");
       newItemCancel.textContent = "Cancel";
@@ -360,12 +378,19 @@ var TODOController = function() {
 
       // Get item container to expand
       let itemInfoPanel = document.getElementById ("itemsContainer").getElementsByTagName ("div")[itemIndex];
+      let itemListing = itemInfoPanel.previousElementSibling;
+      let itemTitle = itemListing.getElementsByClassName ("itemTitle")[0];
+      if (itemTitle === undefined) {
+         itemTitle = itemListing.getElementsByClassName ("itemTitleExpanded")[0];
+      }
 
       // Change CSS class depending on toggle status
       if (itemInfoPanel.className == "itemInfo") {
          itemInfoPanel.className = "itemInfoExpanded";
+         itemTitle.className = "itemTitleExpanded";
       } else {
          itemInfoPanel.className = "itemInfo";
+         itemTitle.className = "itemTitle";
       }
    }
 
@@ -405,15 +430,107 @@ var TODOController = function() {
       saveAppData();
    }
 
+   // Save the main current app data to local storage
    function saveAppData() {
       localStorage.setItem ('SimpleTODO', master.getJSON());
    }
 
+   // Save the secondary current app data to local storage
+   function saveExtraAppData() {
+      localStorage.setItem ('SimpleTODOTheme', currentTheme);
+   }
+
+   // Load a saved data from the local storage (if existent)
    function LoadAppData() {
       if (localStorage.getItem ('SimpleTODO')) {
          master.loadFromJSON (localStorage.getItem ('SimpleTODO'));
       }
+      if (localStorage.getItem ('SimpleTODOTheme')) {
+         currentTheme = parseInt (localStorage.getItem ('SimpleTODOTheme'));
+      }
+      ChangeTheme (currentTheme);
    }
 
-   return {UnloadViews, LoadMainView, LoadAppData};
+   // Change the color scheme of the app
+   function ChangeTheme (themeNumber) {
+
+      // Keep track of current theme
+      currentTheme = themeNumber;
+
+      // Reset to default theme
+      resetTheme();
+
+      // Get container elements
+      let body = document.body;
+      let header = document.getElementById ("header");
+      let bodydiv = document.getElementById ("body");
+
+      // Change CSS classes depending on chosen theme
+      switch (currentTheme) {
+         default:
+            body.classList.add ("body_scheme0");
+            header.classList.add ("header_scheme0");
+            bodydiv.classList.add ("bodydiv_scheme0");
+            break;
+         case 1:
+            body.classList.add ("body_scheme1");
+            header.classList.add ("header_scheme1");
+            bodydiv.classList.add ("bodydiv_scheme1");
+            break;
+         case 2:
+            body.classList.add ("body_scheme2");
+            header.classList.add ("header_scheme2");
+            bodydiv.classList.add ("bodydiv_scheme2");
+            break;
+         case 3:
+            body.classList.add ("body_scheme3");
+            header.classList.add ("header_scheme3");
+            bodydiv.classList.add ("bodydiv_scheme3");
+            break;
+         case 4:
+            body.classList.add ("body_scheme4");
+            header.classList.add ("header_scheme4");
+            bodydiv.classList.add ("bodydiv_scheme4");
+            break;
+         case 5:
+            body.classList.add ("body_scheme5");
+            header.classList.add ("header_scheme5");
+            bodydiv.classList.add ("bodydiv_scheme5");
+            break;
+      }
+
+      // Save current configuration
+      saveExtraAppData();
+   }
+
+   // Reset the theme of the app before applying new theme
+   function resetTheme() {
+
+      // Get container elements
+      let body = document.body;
+      let header = document.getElementById ("header");
+      let bodydiv = document.getElementById ("body");
+
+      // Remove css classes
+      body.classList.remove ("body_scheme0");
+      body.classList.remove ("body_scheme1");
+      body.classList.remove ("body_scheme2");
+      body.classList.remove ("body_scheme3");
+      body.classList.remove ("body_scheme4");
+      body.classList.remove ("body_scheme5");
+      header.classList.remove ("header_scheme0");
+      header.classList.remove ("header_scheme1");
+      header.classList.remove ("header_scheme2");
+      header.classList.remove ("header_scheme3");
+      header.classList.remove ("header_scheme4");
+      header.classList.remove ("header_scheme5");
+      bodydiv.classList.remove ("bodydiv_scheme0");
+      bodydiv.classList.remove ("bodydiv_scheme1");
+      bodydiv.classList.remove ("bodydiv_scheme2");
+      bodydiv.classList.remove ("bodydiv_scheme3");
+      bodydiv.classList.remove ("bodydiv_scheme4");
+      bodydiv.classList.remove ("bodydiv_scheme5");
+   }
+
+   return {UnloadViews, LoadMainView, LoadAppData, ChangeTheme};
 }

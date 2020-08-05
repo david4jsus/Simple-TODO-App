@@ -2,13 +2,17 @@
 /*
 
    == Current increment ==
-   --- Basic functionality is implemented! :) ---
-
-   == Next increment (+1) ==
    - Work on better UI
 
-   == Next increment (+2) ==
+   == Next increment (+1) ==
    - Work on secondary features
+      - Theme selector
+      - Erase all TODO data
+      - Item sorting
+      - Show all items
+
+   == Next increment (+2) ==
+   - Buf fixing (?) (Might be done with project)
 
    ------------------------------------------------
 
