@@ -42,6 +42,14 @@
    - ee5622
 */
 
+.hidden {
+   display: none;
+}
+
+.not-hidden {
+   display: initial;
+}
+
 html {
    height: 100%;
 }
@@ -51,15 +59,31 @@ body {
    margin: 20px 50px 10px 50px;
    font-family: Verdana, Geneva, sans-serif;
    font-size: 1.2em;
+   transition: ease-out 0.3s;
+   -moz-transition: ease-out 0.3s;
+   -o-transition: ease-out 0.3s;
 }
 
 button {
    font-size: initial;
+   border-radius: 10px;
+}
+
+button:hover {
+   background-color: #aaaaaa;
 }
 
 label {
    display: inline-block;
    width: 123px;
+}
+
+select {
+   border-radius: 5px;
+}
+
+input {
+   border-radius: 5px;
 }
 
 #header {
@@ -71,10 +95,6 @@ label {
    height: 100%;
    border-radius: 25px;
    padding: 5px 10px 5px 10px;
-}
-
-.settingsBtn {
-   float: right;
 }
 
 .itemContainer {
@@ -90,7 +110,7 @@ label {
 .floatingMenu {
    width: 80%;
    position: fixed;
-   z-index: 1;
+   z-index: 2;
    left: 8%;
    top: 25%;
    padding: 20px;
@@ -118,14 +138,56 @@ label {
    cursor: pointer;
 }
 
+#itemSortOption {
+   appearance: none;
+   -moz-appearance: none;
+   -webkit-appearance: none;
+   border-top: none;
+   border-left: none;
+   border-right: none;
+   border-bottom: 1px dashed black;
+   border-radius: 0;
+   background-color: transparent;
+   font-size: 0.6em;
+}
+
+/*#itemSortOption::-ms-expand {
+   display: none;
+}*/
+
+#projectDropDown {
+   position: fixed;
+   margin: 0;
+   width: 150px;
+   padding: 10px;
+   font-size: 0.6em;
+   border: 1px solid white;
+   background-color: #333333;
+   color: white;
+   list-style-type: none;
+}
+
+#projectDropDown div {
+   cursor: pointer;
+}
+
+#projectDropDown div:hover {
+   background-color: #666666;
+}
+
 .itemListing {
    cursor: pointer;
    font-weight: normal;
    padding: 3px;
+   list-style-type: none;
 }
 
 .itemListingFloating {
    display: none;
+}
+
+.itemListingFloatingActive {
+   display: inline;
 }
 
 .itemListing:hover .itemListingFloating {
@@ -145,6 +207,22 @@ label {
    font-weight: bold;
 }
 
+.itemDropDown {
+   position: fixed;
+   margin: 0;
+   width: 80px;
+   padding: 10px;
+   font-size: 0.8em;
+   border: 1px solid white;
+   background-color: #333333;
+   color: white;
+   list-style-type: none;
+}
+
+.itemDropDown div:hover {
+   background-color: #666666;
+}
+
 .itemInfo {
    max-height: 0;
    overflow: hidden;
@@ -152,6 +230,65 @@ label {
 
 .itemInfoExpanded {
    max-height: initial;
+}
+
+#settingsBtn {
+   float: right;
+   cursor: pointer;
+}
+
+#settingsCloseBtn {
+   text-align: right;
+   cursor: pointer;
+}
+
+#settings {
+   position: fixed;
+   top: 0;
+   right: -350px;
+   height: 100%;
+   width: 325px;
+   z-index: 4;
+   background-color: #333333;
+   border-left: 2px solid white;
+   color: white;
+   overflow-x: hidden;
+   padding: 10px;
+   transition: ease-out 0.3s;
+   -moz-transition: ease-out 0.3s;
+   -o-transition: ease-out 0.3s;
+}
+
+#settings label {
+   width: 280px;
+}
+
+#dimmer {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: -1;
+   background-color: black;
+   opacity: 0;
+   transition: ease-out 0.3s;
+   -moz-transition: ease-out 0.3s;
+   -o-transition: ease-out 0.3s;
+}
+
+.eraseWarningDiv {
+   width: 80%;
+   position: fixed;
+   z-index: 6;
+   left: 8%;
+   top: 25%;
+   padding: 20px;
+   background-color: #333333;
+   border: 2px solid red;
+   border-radius: 25px;
+   color: white;
+   text-align: center;
 }
 
 .body_scheme0 {

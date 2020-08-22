@@ -1,36 +1,34 @@
 //== NOTES ==//
 /*
 
-   == Current increment ==
-   - Work on better UI
-
-   == Next increment (+1) ==
-   - Work on secondary features
-      - Theme selector
-      - Erase all TODO data
-      - Item sorting
-      - Show all items
-
-   == Next increment (+2) ==
-   - Buf fixing (?) (Might be done with project)
-
-   ------------------------------------------------
-
-   JSON app data format:
-   * Array (project list)
-      * Object (individual project)
-         - Title: project title
-         * Array (TODO list)
-            * Object (individual TODO)
-               - Title: TODO title
-               - Description: TODO description
-               - Due date: TODO due date
-               - Priority: TODO priority
+   == Possible future features ==
+   - Use priorities toggle (?)
+   - Hide completed items toggle
+   - In all items view, add additional group by project option
 
 */
 
 //== Main ==//
 
+// Create app controller
 var controller = TODOController();
 window.onload = controller.LoadAppData();
 controller.LoadMainView();
+
+// Open settings tab
+document.getElementById ("settingsBtn").addEventListener ("click", controller.OpenSettings);
+
+// Close settings tab
+document.getElementById ("settingsCloseBtn").addEventListener ("click", controller.CloseSettings);
+
+// Change theme setting
+let themeSelector = document.getElementById ("themeSelector")
+themeSelector.addEventListener ("change", function() {
+   controller.ChangeTheme (parseInt(themeSelector.value));
+});
+
+// Change show project completion status setting
+document.getElementById ("showCompletionSetting").addEventListener ("change", controller.ToggleShowCompletionSetting);
+
+// Erase all data
+document.getElementById ("eraseTODODataBtn").addEventListener ("click", controller.LoadEraseWarningView);

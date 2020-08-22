@@ -7,10 +7,37 @@
    </head>
    <body>
       <div id="header">
-         <h1>Simple TODO <span class="settingsBtn">&#9776;</span></h1>
+         <h1>Simple TODO <span id="settingsBtn"">&#9776;</span></h1>
       </div>
       <div id="body">
       </div>
+      <div id="settings">
+         <h1 id="settingsCloseBtn">&times;</h1>
+         <h2>Settings</h2>
+         <span>Theme: </span>
+         <select id="themeSelector">
+            <option value=0>Default theme</option>
+            <option value=1>Theme 1</option>
+            <option value=2>Theme 2</option>
+            <option value=3>Theme 3</option>
+            <option value=4>Theme 4</option>
+            <option value=5>Theme 5</option>
+         </select>
+         <br /><br />
+         <!--
+         <label for="usePrioritySetting">Use priorities in TODO items:</label>
+         <input type="checkbox" id="usePrioritySetting" />
+         <br /><br />
+         <label for="hideCompletedSetting">Hide completed TODO items:</label>
+         <input type="checkbox" id="hideCompletedSetting" />
+         <br /><br />
+         -->
+         <label for="showCompletionSetting">Show completion status (percentage) for projects:</label>
+         <input type="checkbox" id="showCompletionSetting" />
+         <br /><br />
+         <button id="eraseTODODataBtn">Erase all project data</button>
+      </div>
+      <div id="dimmer"></div>
       <script src="todo.js"></script>
       <script src="dom.js"></script>
       <script src="index.js"></script>
